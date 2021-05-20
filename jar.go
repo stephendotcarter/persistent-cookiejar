@@ -605,6 +605,7 @@ func (j *Jar) newEntry(c *http.Cookie, now time.Time, defPath, host string) (e e
 			return e, nil
 		}
 	} else if c.Expires.IsZero() {
+		e.Persistent = true
 		e.Expires = endOfTime
 	} else {
 		e.Persistent = true
@@ -630,7 +631,7 @@ var (
 // endOfTime is the time when session (non-persistent) cookies expire.
 // This instant is representable in most date/time formats (not just
 // Go's time.Time) and should be far enough in the future.
-var endOfTime = time.Date(9999, 12, 31, 23, 59, 59, 0, time.UTC)
+var endOfTime = time.Now().UTC().Add(time.Hour * 1)
 
 // domainAndType determines the cookie's domain and hostOnly attribute.
 func (j *Jar) domainAndType(host, domain string) (string, bool, error) {
